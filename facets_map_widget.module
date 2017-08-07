@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations.
+ */
+
+/**
+ * Implements hook_facets_search_api_query_type_mapping_alter().
+ */
+function facets_map_widget_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
+  $backend_manager = \Drupal::service('plugin.manager.search_api.backend');
+  /** @var \Drupal\search_api\Backend\BackendInterface $plugin */
+  $plugin = $backend_manager->createInstance($backend_plugin_id);
+
+  // Check if locations are supported by the backend plugin before adding the
+  // query type to the allowed query types.
+  if (in_array('search_api_rpt', $plugin->getSupportedFeatures(), TRUE)) {
+    $query_types['rpt'] = 'search_api_rpt';
+  }
+  // @todo Support geohash
+  if (in_array('search_api_geohash', $plugin->getSupportedFeatures(), TRUE)) {
+    $query_types['geohash'] = 'search_api_geohash';
+  }
+}
