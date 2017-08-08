@@ -4,6 +4,8 @@
  */
 (function ($, Drupal) {
 
+    Drupal.facets = Drupal.facets || {};
+
     Drupal.behaviors.mapFacets = {
         attach: function (context, settings) {
 
@@ -26,8 +28,9 @@
                     // Call the parent function
                     L.GeoJSON.prototype.onAdd.call(_this, map);
 
-                    map.on('moveend', function () {
+                    map.on('moveend', function (settings) {
                         _this._clearLayers();
+                        window.location.href = settings.url.replace('__GEOM__', _this._mapViewToWkt());
                         _this._getData();
                     });
                 },
@@ -300,8 +303,6 @@
                 _getData: function() {
 
                     var _this = this;
-                    var startTime = Date.now();
-
                     _this._computeHeatmapObject();
 
                 },

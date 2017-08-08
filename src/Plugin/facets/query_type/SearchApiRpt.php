@@ -42,15 +42,15 @@ class SearchApiRpt extends QueryTypePluginBase {
         $format = 'png';
       }
     }
-
+    $new_geom_value = \Drupal::request()->get('geom');
     $options['search_api_rpt'][$field_identifier] = [
       'field' => $field_identifier,
-      'geom' => '["-180 -90" TO "180 90"]',
+      'geom' => $new_geom_value !== NULL ? $new_geom_value: '["-180 -90" TO "180 90"]',
       'gridLevel' => '2',
       'maxCells'=> '35554432',
       'distErrPct' => '',
       'distErr' => '',
-      'format' => $format
+      'format' => $format,
     ];
   }
 
