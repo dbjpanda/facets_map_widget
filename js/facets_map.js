@@ -15,12 +15,15 @@
                     colors: ['#f1eef6', '#d7b5d8', '#df65b0', '#dd1c77', '#980043'],
                     maxSampleSize: Number.MAX_SAFE_INTEGER  // for Jenks classification
                 },
+                settings: NULL,
 
-                initialize: function(options) {
+                initialize: function(options, settings) {
                     var _this = this;
                     options = L.setOptions(_this, options);
                     _this._layers = {};
                     _this._getData();
+                    _this.settings = settings;
+
                 },
 
                 onAdd: function (map) {
@@ -28,9 +31,9 @@
                     // Call the parent function
                     L.GeoJSON.prototype.onAdd.call(_this, map);
 
-                    map.on('moveend', function (settings) {
+                    map.on('moveend', function () {
                         _this._clearLayers();
-                        window.location.href = settings.url.replace('__GEOM__', _this._mapViewToWkt());
+                        window.location.href = _this.settings.url.replace('__GEOM__', _this._mapViewToWkt());
                         _this._getData();
                     });
                 },
@@ -331,7 +334,7 @@
             });
 
             L.solrHeatmap = function(options) {
-                return new L.SolrHeatmap(options);
+                return new L.SolrHeatmap(options, settings);
             };
 
 // Check if L.MarkerCluster is included
